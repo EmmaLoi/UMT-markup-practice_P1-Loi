@@ -152,7 +152,7 @@ button {
 
 .nav-link:hover,
 .nav-link:focus {
-  color: var(--accent-color);
+  opacity: 0.6;
 }
 
 .hero {
@@ -175,16 +175,17 @@ button {
 .hero-title {
   margin-bottom: 24px;
   font-family: "Hanuman", serif;
-  font-size: 40px;
+  font-size: 36px;
   line-height: 1.2;
   font-weight: 400;
   letter-spacing: -0.01em;
+  max-width: 243px;
 }
 
 .hero-text {
   max-width: 247px;
   margin-bottom: 32px;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.5;
   font-weight: 400;
 }
@@ -252,6 +253,8 @@ button {
 .bestsellers-title {
   margin-bottom: 32px;
   text-align: left;
+  font-size: 32px;
+  line-height: 1.2;
 }
 
 .bestsellers-list {
@@ -292,7 +295,7 @@ button {
 .bestsellers-dots {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 0;
 }
 
@@ -328,13 +331,18 @@ button {
 
 .slider-btn:hover,
 .slider-btn:focus {
-  background-color: var(--accent-hover-color);
-  border-color: var(--accent-hover-color);
+  opacity: 0.5;
+}
+
+.slider-btn:active {
+  opacity: 1;
 }
 
 .bouquets-title {
   margin-bottom: 8px;
   text-align: center;
+  font-size: 34px;
+  line-height: 1.2;
 }
 
 .bouquets-text {
@@ -571,7 +579,7 @@ button {
 
 .footer-link:hover,
 .footer-link:focus {
-  color: var(--accent-color);
+  opacity: 0.6;
 }
 
 .footer-social-list {
@@ -596,7 +604,7 @@ button {
 
 .footer-social-link:hover,
 .footer-social-link:focus {
-  color: var(--accent-color);
+  opacity: 0.6;
 }
 
 .footer-bottom {
@@ -748,6 +756,7 @@ button {
     font-size: 36px;
     line-height: 1.2;
     margin-bottom: 24px;
+    max-width: none;
   }
 
   .hero-text {
@@ -1130,6 +1139,7 @@ button {
 
   .feedback-controls {
     margin-top: 32px;
+    justify-content: flex-end;
   }
 
   /* Contacts */
