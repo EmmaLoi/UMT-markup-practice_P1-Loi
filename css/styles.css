@@ -1204,3 +1204,394 @@ button {
     margin-left: auto;
   }
 }
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(3, 12, 1, 0.4);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.order-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: calc(100% - 32px);
+  max-width: 842px;
+  padding: 64px;
+  border-radius: 24px;
+
+  background-color: #ffffff;
+
+  transform: translate(-50%, -50%);
+}
+
+.order-modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  background-color: transparent;
+  border: none;
+
+  cursor: pointer;
+
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.order-modal-close-icon {
+  display: block;
+
+  width: 32px;
+  height: 32px;
+
+  fill: currentColor;
+}
+
+.order-modal-close-btn:hover,
+.order-modal-close-btn:focus {
+  opacity: 0.5;
+}
+
+.order-modal-title {
+  margin-bottom: 48px;
+
+  font-family: "Hanuman", serif;
+  font-size: 34px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: #030c01;
+}
+
+.order-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-form-label {
+  margin-bottom: 8px;
+
+  font-size: 16px;
+  line-height: 1.5;
+  color: #030c01;
+}
+
+.order-form-input {
+  width: 100%;
+  height: 40px;
+  margin-bottom: 24px;
+  padding: 8px 12px;
+
+  border: 1px solid rgba(3, 12, 1, 0.15);
+  border-radius: 12px;
+  outline: transparent;
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  transition: border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.order-form-input::placeholder,
+.order-form-textarea::placeholder {
+  color: rgba(3, 12, 1, 0.6);
+}
+
+.order-form-input:focus,
+.order-form-textarea:focus {
+  border-color: #030c01;
+}
+
+.order-form-textarea {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 24px;
+  padding: 12px;
+
+  resize: none;
+  border: 1px solid rgba(3, 12, 1, 0.15);
+  border-radius: 12px;
+  outline: transparent;
+
+  font-size: 16px;
+  line-height: 1.5;
+
+  transition: border-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.order-form-submit-btn {
+  display: block;
+  min-width: 159px;
+  height: 44px;
+  margin: 0 auto;
+  padding: 10px 24px;
+
+  border: none;
+  border-radius: 100px;
+
+  background-image: linear-gradient(90deg, #e8e81c 0%, #42ed13 100%);
+  color: #030c01;
+
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.order-form-submit-btn:hover,
+.order-form-submit-btn:focus {
+  opacity: 0.5;
+}
+
+.product-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: calc(100% - 32px);
+  max-width: 1280px;
+  padding: 64px;
+  border-radius: 24px;
+
+  background-color: #ffffff;
+
+  transform: translate(-50%, -50%);
+}
+
+.product-modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  background-color: transparent;
+  border: none;
+
+  cursor: pointer;
+
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-modal-close-icon {
+  display: block;
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+.product-modal-close-btn:hover,
+.product-modal-close-btn:focus {
+  opacity: 0.5;
+}
+
+.product-modal-content {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+
+.product-modal-img {
+  width: 536px;
+  height: 572px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.product-modal-info {
+  width: 536px;
+}
+
+.product-modal-title {
+  margin-bottom: 24px;
+
+  font-family: "Hanuman", serif;
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #030c01;
+}
+
+.product-modal-price {
+  margin-bottom: 24px;
+
+  font-size: 18px;
+  line-height: 1.5;
+  color: #030c01;
+}
+
+.product-modal-text {
+  margin-bottom: 32px;
+
+  font-size: 14px;
+  line-height: 1.5;
+  color: #030c01;
+}
+
+.product-modal-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.product-modal-buy-btn {
+  width: 456px;
+  height: 44px;
+  padding: 10px 24px;
+
+  border: 1px solid transparent;
+  border-radius: 100px;
+
+  background-image: linear-gradient(104.04deg, #e8e81c 0%, #42ed13 100%);
+  color: #030c01;
+
+  cursor: pointer;
+
+  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-modal-buy-btn:hover,
+.product-modal-buy-btn:focus {
+  opacity: 0.5;
+}
+
+.product-modal-quantity {
+  width: 64px;
+  height: 40px;
+  padding: 8px 12px;
+
+  border: 1px solid rgba(3, 12, 1, 0.15);
+  border-radius: 12px;
+  outline: transparent;
+}
+
+@media screen and (max-width: 767px) {
+  .product-modal {
+    max-width: 335px;
+    padding: 56px 20px;
+  }
+
+  .product-modal-content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 48px;
+  }
+
+  .product-modal-img {
+    width: 295px;
+    height: 315px;
+  }
+
+  .product-modal-info {
+    width: 295px;
+  }
+
+  .product-modal-actions {
+    width: 295px;
+  }
+
+  .product-modal-buy-btn {
+    width: 215px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+  .product-modal {
+    max-width: 704px;
+    padding: 64px 32px;
+  }
+
+  .product-modal-content {
+    gap: 24px;
+  }
+
+  .product-modal-img {
+    width: 308px;
+    height: 329px;
+  }
+
+  .product-modal-info {
+    width: 308px;
+  }
+
+  .product-modal-text {
+    margin-bottom: 32px;
+  }
+
+  .product-modal-buy-btn {
+    width: 228px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+  .order-modal {
+    width: 704px;
+    max-width: calc(100% - 64px);
+    padding: 32px;
+  }
+
+  .order-form-input {
+    width: 100%;
+    height: 40px;
+  }
+
+  .order-form-textarea {
+    width: 100%;
+    height: 120px;
+  }
+
+  .order-form-submit-btn {
+    width: 340px;
+    min-width: 340px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .order-modal {
+    max-width: 335px;
+    padding: 56px 20px;
+  }
+
+  .order-modal-title {
+    margin-bottom: 24px;
+  }
+
+  .order-form-textarea {
+    height: 120px;
+  }
+
+  .order-form-submit-btn {
+    width: 295px;
+    min-width: 295px;
+  }
+}

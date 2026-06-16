@@ -159,7 +159,7 @@
           <h2 class="section-title bestsellers-title">Top-Selling Bouquets</h2>
 
           <ul class="bestsellers-list">
-            <li class="bestsellers-item">
+            <li class="bestsellers-item js-product-card">
               <img
                 src="./images/spring-elegance.webp"
                 alt="Spring Elegance bouquet"
@@ -493,34 +493,118 @@
         </div>
       </div>
     </footer>
+    <div class="backdrop product-details-backdrop is-open">
+      <div class="product-modal">
+        <button
+          class="product-modal-close-btn"
+          type="button"
+          aria-label="Close product details modal"
+        >
+          <svg class="product-modal-close-icon" width="32" height="32">
+            <use href="./images/icons.svg#icon-cross"></use>
+          </svg>
+        </button>
 
+        <div class="product-modal-content">
+          <img
+            class="product-modal-img"
+            src="./images/spring-elegance.webp"
+            alt="Spring Elegance bouquet"
+            width="536"
+            height="572"
+          />
+
+          <div class="product-modal-info">
+            <h2 class="product-modal-title">Spring Elegance</h2>
+            <p class="product-modal-price">$35</p>
+            <p class="product-modal-text">
+              Each stem is carefully selected to create a bouquet that radiates
+              freshness, elegance, and the gentle charm of spring. Whether
+              you’re celebrating a birthday, sending love, or simply brightening
+              someone’s day, this arrangement is sure to bring warm smiles and
+              lasting impressions.
+            </p>
+
+            <div class="product-modal-actions">
+              <button class="product-modal-buy-btn" type="button">
+                Buy now
+              </button>
+              <input
+                class="product-modal-quantity"
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                aria-label="Bouquet quantity"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="backdrop order-backdrop">
+      <div class="order-modal">
+        <button
+          class="order-modal-close-btn"
+          type="button"
+          aria-label="Close order modal"
+        >
+          <svg class="order-modal-close-icon" width="32" height="32">
+            <use href="./images/icons.svg#icon-cross"></use>
+          </svg>
+        </button>
+
+        <p class="order-modal-title">Order</p>
+
+        <form class="order-form">
+          <label class="order-form-label" for="order-name">Name*</label>
+          <input
+            class="order-form-input"
+            id="order-name"
+            type="text"
+            name="name"
+            placeholder="Ann"
+            required
+          />
+
+          <label class="order-form-label" for="order-phone">Phone*</label>
+          <input
+            class="order-form-input"
+            id="order-phone"
+            type="tel"
+            name="phone"
+            placeholder="+1 (555) 123-4567"
+            required
+          />
+
+          <label class="order-form-label" for="order-address">Adress*</label>
+          <input
+            class="order-form-input"
+            id="order-address"
+            type="text"
+            name="address"
+            placeholder="456 Floral Ave, Sydney NSW 2000 AU"
+            required
+          />
+
+          <label class="order-form-label" for="order-message">Message</label>
+          <textarea
+            class="order-form-textarea"
+            id="order-message"
+            name="message"
+            placeholder="Type your message..."
+          ></textarea>
+
+          <button class="order-form-submit-btn" type="submit">
+            Go to Checkout
+          </button>
+        </form>
+      </div>
+    </div>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
       AOS.init({ duration: 700, once: true });
     </script>
-    <script>
-      const menuOpenBtn = document.querySelector(".menu-open-btn");
-      const menuCloseBtn = document.querySelector(".mobile-menu-close-btn");
-      const mobileMenu = document.querySelector(".mobile-menu");
-
-      function openMenu() {
-        mobileMenu.classList.add("is-open");
-        document.body.style.overflow = "hidden";
-      }
-
-      function closeMenu() {
-        mobileMenu.classList.remove("is-open");
-        document.body.style.overflow = "";
-      }
-
-      menuOpenBtn.addEventListener("click", openMenu);
-      menuCloseBtn.addEventListener("click", closeMenu);
-
-      mobileMenu
-        .querySelectorAll(".mobile-nav-link, .mobile-menu-btn")
-        .forEach(function (link) {
-          link.addEventListener("click", closeMenu);
-        });
-    </script>
+    <script src="./js/main.js"></script>
   </body>
 </html>
