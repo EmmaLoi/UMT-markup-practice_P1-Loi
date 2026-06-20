@@ -7,6 +7,8 @@ const productModalTitle = document.querySelector(".product-modal-title");
 const productModalPrice = document.querySelector(".product-modal-price");
 const productModalText = document.querySelector(".product-modal-text");
 const feedbackList = document.querySelector(".feedback-list");
+const bestsellersMessage = document.querySelector(".bestsellers-message");
+const feedbackMessage = document.querySelector(".feedback-message");
 
 function updateProductModal(bouquet) {
   productModalImg.src = bouquet.image;
@@ -17,14 +19,14 @@ function updateProductModal(bouquet) {
   productModalText.textContent = bouquet.description;
 }
 
-function showMessage(text) {
-  bouquetsMessage.textContent = text;
-  bouquetsMessage.classList.remove("is-hidden");
+function showMessage(element, text) {
+  element.textContent = text;
+  element.classList.remove("is-hidden");
 }
 
-function hideMessage() {
-  bouquetsMessage.textContent = "";
-  bouquetsMessage.classList.add("is-hidden");
+function hideMessage(element) {
+  element.textContent = "";
+  element.classList.add("is-hidden");
 }
 
 function openMenu() {
@@ -121,19 +123,22 @@ function createBouquetMarkup(bouquet) {
 }
 
 async function renderBouquets() {
-  hideMessage();
-  showMessage("Loading bouquets...");
+  hideMessage(bouquetsMessage);
+  showMessage(bouquetsMessage, "Loading bouquets...");
   loadMoreBtn.style.display = "none";
 
   const response = await getBouquets(state.page, state.limit);
   if (response.error) {
-    showMessage("Something went wrong. Please try again later.");
+    showMessage(
+      bouquetsMessage,
+      "Something went wrong. Please try again later.",
+    );
     loadMoreBtn.style.display = "none";
     return;
   }
 
   if (response.data.length === 0) {
-    showMessage("No more bouquets");
+    showMessage(bouquetsMessage, "No more bouquets");
     loadMoreBtn.style.display = "none";
     return;
   }
@@ -144,7 +149,7 @@ async function renderBouquets() {
 
   const markup = response.data.map(createBouquetMarkup).join("");
   bouquetsList.insertAdjacentHTML("beforeend", markup);
-  hideMessage();
+  hideMessage(bouquetsMessage);
 
   if (state.page >= response.pages) {
     loadMoreBtn.style.display = "none";
@@ -173,7 +178,10 @@ async function handleProductClick(event) {
   }
 
   if (!product) {
-    showMessage("Something went wrong. Please try again later.");
+    showMessage(
+      bouquetsMessage,
+      "Something went wrong. Please try again later.",
+    );
     return;
   }
 
@@ -206,11 +214,20 @@ function createBestsellerMarkup(bouquet) {
 }
 
 async function renderBestsellers() {
-  const bestsellers = await getBestsellers();
+  const response = await getBestsellers();
 
+  if (response.error) {
+    showMessage(
+      bestsellersMessage,
+      "Something went wrong. Please try again later.",
+    );
+    return;
+  }
+
+  hideMessage(bestsellersMessage);
   bestsellersList.innerHTML = "";
 
-  const markup = bestsellers.map(createBestsellerMarkup).join("");
+  const markup = response.data.map(createBestsellerMarkup).join("");
   bestsellersList.insertAdjacentHTML("beforeend", markup);
 }
 
@@ -224,10 +241,19 @@ function createFeedbackMarkup(feedback) {
 }
 
 async function renderFeedback() {
-  const feedback = await getFeedback();
+  const response = await getFeedback();
 
+  if (response.error) {
+    showMessage(
+      feedbackMessage,
+      "Something went wrong. Please try again later.",
+    );
+    return;
+  }
+
+  hideMessage(feedbackMessage);
   feedbackList.innerHTML = "";
 
-  const markup = feedback.map(createFeedbackMarkup).join("");
+  const markup = response.data.map(createFeedbackMarkup).join("");
   feedbackList.insertAdjacentHTML("beforeend", markup);
 }

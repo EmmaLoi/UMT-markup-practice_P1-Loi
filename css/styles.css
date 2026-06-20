@@ -408,7 +408,9 @@ button {
   opacity: 0.8;
 }
 
-.bouquets-message {
+.bouquets-message,
+.bestsellers-message,
+.feedback-message {
   margin-bottom: 24px;
   text-align: center;
   font-size: 16px;
@@ -981,7 +983,6 @@ button {
   }
 }
 
-
 @media screen and (min-width: 768px) and (max-width: 1199px) and (min-resolution: 2dppx) {
   .hero {
     background-image:
@@ -1235,7 +1236,6 @@ button {
   }
 }
 
-
 @media screen and (min-width: 1200px) and (min-resolution: 2dppx) {
   .hero {
     background-image:
@@ -1258,7 +1258,8 @@ button {
   visibility: hidden;
   pointer-events: none;
 
-  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
+  transition:
+    opacity 250ms cubic-bezier(0.4, 0, 0.2, 1),
     visibility 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 

@@ -35,10 +35,10 @@ async function getBestsellers() {
   try {
     const response = await axios.get(`${BASE_URL}/bestsellers`);
 
-    return response.data;
+    return { data: response.data, error: false };
   } catch (error) {
     console.error("Failed to fetch bestsellers:", error);
-    return [];
+    return { data: [], error: true };
   }
 }
 
@@ -55,9 +55,9 @@ async function getBestsellerById(id) {
 async function getFeedback() {
   try {
     const response = await axios.get(`${BASE_URL}/feedback`);
-    return response.data;
+    return { data: response.data, error: false };
   } catch (error) {
     console.error("Failed to fetch feedback:", error);
-    return [];
+    return { data: [], error: true };
   }
 }
