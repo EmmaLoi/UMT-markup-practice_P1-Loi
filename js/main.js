@@ -1,6 +1,31 @@
 const menuOpenBtn = document.querySelector(".menu-open-btn");
 const menuCloseBtn = document.querySelector(".mobile-menu-close-btn");
 const mobileMenu = document.querySelector(".mobile-menu");
+const bouquetsMessage = document.querySelector(".bouquets-message");
+const productModalImg = document.querySelector(".product-modal-img");
+const productModalTitle = document.querySelector(".product-modal-title");
+const productModalPrice = document.querySelector(".product-modal-price");
+const productModalText = document.querySelector(".product-modal-text");
+const feedbackList = document.querySelector(".feedback-list");
+
+function updateProductModal(bouquet) {
+  productModalImg.src = bouquet.image;
+  productModalImg.srcset = `${bouquet.image} 1x, ${bouquet.image2x} 2x`;
+  productModalImg.alt = bouquet.alt;
+  productModalTitle.textContent = bouquet.title;
+  productModalPrice.textContent = bouquet.price;
+  productModalText.textContent = bouquet.description;
+}
+
+function showMessage(text) {
+  bouquetsMessage.textContent = text;
+  bouquetsMessage.classList.remove("is-hidden");
+}
+
+function hideMessage() {
+  bouquetsMessage.textContent = "";
+  bouquetsMessage.classList.add("is-hidden");
+}
 
 function openMenu() {
   mobileMenu.classList.add("is-open");
@@ -25,7 +50,6 @@ const productDetailsBackdrop = document.querySelector(
   ".product-details-backdrop",
 );
 const productModalCloseBtn = document.querySelector(".product-modal-close-btn");
-const productCards = document.querySelectorAll(".js-product-card");
 const orderBackdrop = document.querySelector(".order-backdrop");
 const buyNowBtn = document.querySelector(".product-modal-buy-btn");
 const orderModalCloseBtn = document.querySelector(".order-modal-close-btn");
@@ -63,10 +87,6 @@ buyNowBtn.addEventListener("click", function () {
   openOrderModal();
 });
 
-productCards.forEach(function (card) {
-  card.addEventListener("click", openProductModal);
-});
-
 productModalCloseBtn.addEventListener("click", closeProductModal);
 
 productDetailsBackdrop.addEventListener("click", function (event) {
@@ -74,3 +94,140 @@ productDetailsBackdrop.addEventListener("click", function (event) {
     closeProductModal();
   }
 });
+
+const bouquetsList = document.querySelector(".bouquets-list");
+const loadMoreBtn = document.querySelector(".show-more-btn");
+const bestsellersList = document.querySelector(".bestsellers-list");
+
+const state = {
+  page: 1,
+  limit: 4,
+};
+
+function createBouquetMarkup(bouquet) {
+  return `
+    <li class="bouquets-item js-product-card" data-id="${bouquet.id}">
+      <img
+        src="${bouquet.image}"
+        srcset="${bouquet.image} 1x, ${bouquet.image2x} 2x"
+        alt="${bouquet.alt}"
+        width="288"
+        height="296"
+      />
+      <h3 class="product-title">${bouquet.title}</h3>
+      <p class="product-price">${bouquet.price}</p>
+    </li>
+  `;
+}
+
+async function renderBouquets() {
+  hideMessage();
+  showMessage("Loading bouquets...");
+  loadMoreBtn.style.display = "none";
+
+  const response = await getBouquets(state.page, state.limit);
+  if (response.error) {
+    showMessage("Something went wrong. Please try again later.");
+    loadMoreBtn.style.display = "none";
+    return;
+  }
+
+  if (response.data.length === 0) {
+    showMessage("No more bouquets");
+    loadMoreBtn.style.display = "none";
+    return;
+  }
+
+  if (state.page === 1) {
+    bouquetsList.innerHTML = "";
+  }
+
+  const markup = response.data.map(createBouquetMarkup).join("");
+  bouquetsList.insertAdjacentHTML("beforeend", markup);
+  hideMessage();
+
+  if (state.page >= response.pages) {
+    loadMoreBtn.style.display = "none";
+  } else {
+    loadMoreBtn.style.display = "flex";
+  }
+}
+
+renderBouquets();
+renderBestsellers();
+renderFeedback();
+
+async function handleProductClick(event) {
+  const card = event.target.closest(".js-product-card");
+
+  if (!card) {
+    return;
+  }
+
+  let product;
+
+  if (card.dataset.type === "bestseller") {
+    product = await getBestsellerById(card.dataset.id);
+  } else {
+    product = await getBouquetById(card.dataset.id);
+  }
+
+  if (!product) {
+    showMessage("Something went wrong. Please try again later.");
+    return;
+  }
+
+  updateProductModal(product);
+  openProductModal();
+}
+
+bouquetsList.addEventListener("click", handleProductClick);
+bestsellersList.addEventListener("click", handleProductClick);
+
+loadMoreBtn.addEventListener("click", function () {
+  state.page += 1;
+  renderBouquets();
+});
+
+function createBestsellerMarkup(bouquet) {
+  return `
+    <li class="bestsellers-item js-product-card" data-id="${bouquet.id}" data-type="bestseller">
+      <img
+        src="${bouquet.image}"
+        srcset="${bouquet.image} 1x, ${bouquet.image2x} 2x"
+        alt="${bouquet.alt}"
+        width="384"
+        height="320"
+      />
+      <h3 class="product-title">${bouquet.title}</h3>
+      <p class="product-price">${bouquet.price}</p>
+    </li>
+  `;
+}
+
+async function renderBestsellers() {
+  const bestsellers = await getBestsellers();
+
+  bestsellersList.innerHTML = "";
+
+  const markup = bestsellers.map(createBestsellerMarkup).join("");
+  bestsellersList.insertAdjacentHTML("beforeend", markup);
+}
+
+function createFeedbackMarkup(feedback) {
+  return `
+    <li class="feedback-item">
+      <p class="feedback-text">${feedback.text}</p>
+      <p class="feedback-author">${feedback.author}</p>
+    </li>
+  `;
+}
+
+async function renderFeedback() {
+  const feedback = await getFeedback();
+
+  feedbackList.innerHTML = "";
+
+  const markup = feedback.map(createFeedbackMarkup).join("");
+  feedbackList.insertAdjacentHTML("beforeend", markup);
+}
