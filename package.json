@@ -2,10 +2,7 @@
   "name": "umt-markup-practice_p1-loi",
   "version": "1.0.0",
   "description": "Responsive landing page for a flower shop created as a part of HTML/CSS practice.",
-  "main": "index.js",
-  "scripts": {
-    "server": "json-server --watch db.json --port 3000"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/EmmaLoi/UMT-markup-practice_P1-Loi.git"
@@ -13,7 +10,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/EmmaLoi/UMT-markup-practice_P1-Loi/issues"
   },
@@ -21,7 +17,5 @@
   "dependencies": {
     "axios": "^1.18.0"
   },
-  "devDependencies": {
-    "json-server": "^1.0.0-beta.15"
-  }
+  "devDependencies": {}
 }

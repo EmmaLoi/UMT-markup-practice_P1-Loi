@@ -53,11 +53,10 @@ async function getBouquetById(id) {
 
 async function getBestsellers() {
   try {
-    const response = await axios.get(`${BASE_URL}/bouquets`);
-    const bouquets = response.data.map(normalizeBouquet);
+    const response = await axios.get("./db.json");
 
     return {
-      data: bouquets.slice(0, 3),
+      data: response.data.bestsellers,
       error: false,
     };
   } catch (error) {
@@ -67,7 +66,17 @@ async function getBestsellers() {
 }
 
 async function getBestsellerById(id) {
-  return getBouquetById(id);
+  try {
+    const response = await axios.get("./db.json");
+
+    return (
+      response.data.bestsellers.find((bouquet) => bouquet.id === Number(id)) ||
+      null
+    );
+  } catch (error) {
+    console.error("Failed to fetch bestseller:", error);
+    return null;
+  }
 }
 
 async function getFeedback() {
