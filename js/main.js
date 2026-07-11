@@ -9,6 +9,66 @@ const productModalText = document.querySelector(".product-modal-text");
 const feedbackList = document.querySelector(".feedback-list");
 const bestsellersMessage = document.querySelector(".bestsellers-message");
 const feedbackMessage = document.querySelector(".feedback-message");
+const bestsellersDots = document.querySelector(".bestsellers-dots");
+const bestsellersPrevBtn = document.querySelector(
+  '.bestsellers .slider-btn[aria-label="Previous slide"]',
+);
+const bestsellersNextBtn = document.querySelector(
+  '.bestsellers .slider-btn[aria-label="Next slide"]',
+);
+const feedbackPrevBtn = document.querySelector(
+  '.feedback .slider-btn[aria-label="Previous review"]',
+);
+const feedbackNextBtn = document.querySelector(
+  '.feedback .slider-btn[aria-label="Next review"]',
+);
+const orderForm = document.querySelector(".order-form");
+
+orderForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(orderForm);
+
+  const order = {
+    name: formData.get("name"),
+    phone: formData.get("phone"),
+    address: formData.get("address"),
+    message: formData.get("message"),
+  };
+
+  const response = await createOrder(order);
+
+  if (response.error) {
+    return;
+  }
+
+  orderForm.reset();
+  closeOrderModal();
+});
+
+let bestsellersData = [];
+let feedbackData = [];
+
+let bestsellersPage = 0;
+let feedbackPage = 0;
+
+function getVisibleItemsCount() {
+  if (window.innerWidth >= 1440) {
+    return 3;
+  }
+
+  if (window.innerWidth >= 768) {
+    return 2;
+  }
+
+  return 1;
+}
+
+function updateSliderButton(button, disabled) {
+  button.disabled = disabled;
+  button.style.opacity = disabled ? "0.4" : "1";
+  button.style.cursor = disabled ? "not-allowed" : "pointer";
+}
 
 function updateProductModal(bouquet) {
   productModalImg.src = bouquet.image;
@@ -213,6 +273,34 @@ function createBestsellerMarkup(bouquet) {
   `;
 }
 
+function renderBestsellersPage() {
+  const itemsPerPage = getVisibleItemsCount();
+  const pagesCount = Math.ceil(bestsellersData.length / itemsPerPage);
+
+  if (bestsellersPage >= pagesCount) {
+    bestsellersPage = Math.max(pagesCount - 1, 0);
+  }
+
+  const start = bestsellersPage * itemsPerPage;
+  const visibleItems = bestsellersData.slice(start, start + itemsPerPage);
+
+  bestsellersList.innerHTML = visibleItems.map(createBestsellerMarkup).join("");
+
+  bestsellersDots.innerHTML = Array.from(
+    { length: pagesCount },
+    (_, index) => `
+      <li class="bestsellers-dot ${
+        index === bestsellersPage ? "active" : ""
+      }"></li>
+    `,
+  ).join("");
+
+  if (bestsellersPrevBtn && bestsellersNextBtn) {
+    updateSliderButton(bestsellersPrevBtn, bestsellersPage === 0);
+    updateSliderButton(bestsellersNextBtn, bestsellersPage >= pagesCount - 1);
+  }
+}
+
 async function renderBestsellers() {
   const response = await getBestsellers();
 
@@ -225,11 +313,61 @@ async function renderBestsellers() {
   }
 
   hideMessage(bestsellersMessage);
-  bestsellersList.innerHTML = "";
 
-  const markup = response.data.map(createBestsellerMarkup).join("");
-  bestsellersList.insertAdjacentHTML("beforeend", markup);
+  bestsellersData = response.data;
+  bestsellersPage = 0;
+
+  renderBestsellersPage();
 }
+
+if (bestsellersPrevBtn) {
+  bestsellersPrevBtn.addEventListener("click", () => {
+    if (bestsellersPage === 0) {
+      return;
+    }
+
+    bestsellersPage -= 1;
+    renderBestsellersPage();
+  });
+}
+
+if (bestsellersNextBtn) {
+  bestsellersNextBtn.addEventListener("click", () => {
+    const pagesCount = Math.ceil(
+      bestsellersData.length / getVisibleItemsCount(),
+    );
+
+    if (bestsellersPage >= pagesCount - 1) {
+      return;
+    }
+
+    bestsellersPage += 1;
+    renderBestsellersPage();
+  });
+}
+
+let bestsellersTouchStartX = 0;
+
+bestsellersList.addEventListener("touchstart", (event) => {
+  bestsellersTouchStartX = event.changedTouches[0].clientX;
+});
+
+bestsellersList.addEventListener("touchend", (event) => {
+  const touchEndX = event.changedTouches[0].clientX;
+  const swipeDistance = bestsellersTouchStartX - touchEndX;
+
+  const pagesCount = Math.ceil(bestsellersData.length / getVisibleItemsCount());
+
+  if (swipeDistance > 50 && bestsellersPage < pagesCount - 1) {
+    bestsellersPage += 1;
+    renderBestsellersPage();
+  }
+
+  if (swipeDistance < -50 && bestsellersPage > 0) {
+    bestsellersPage -= 1;
+    renderBestsellersPage();
+  }
+});
 
 function createFeedbackMarkup(feedback) {
   return `
@@ -238,6 +376,23 @@ function createFeedbackMarkup(feedback) {
       <p class="feedback-author">${feedback.author}</p>
     </li>
   `;
+}
+
+function renderFeedbackPage() {
+  const itemsPerPage = getVisibleItemsCount();
+  const pagesCount = Math.ceil(feedbackData.length / itemsPerPage);
+
+  if (feedbackPage >= pagesCount) {
+    feedbackPage = Math.max(pagesCount - 1, 0);
+  }
+
+  const start = feedbackPage * itemsPerPage;
+  const visibleItems = feedbackData.slice(start, start + itemsPerPage);
+
+  feedbackList.innerHTML = visibleItems.map(createFeedbackMarkup).join("");
+
+  updateSliderButton(feedbackPrevBtn, feedbackPage === 0);
+  updateSliderButton(feedbackNextBtn, feedbackPage >= pagesCount - 1);
 }
 
 async function renderFeedback() {
@@ -252,8 +407,36 @@ async function renderFeedback() {
   }
 
   hideMessage(feedbackMessage);
-  feedbackList.innerHTML = "";
+  feedbackData = response.data;
+  feedbackPage = 0;
 
-  const markup = response.data.map(createFeedbackMarkup).join("");
-  feedbackList.insertAdjacentHTML("beforeend", markup);
+  renderFeedbackPage();
 }
+
+feedbackPrevBtn.addEventListener("click", function () {
+  if (feedbackPage === 0) {
+    return;
+  }
+
+  feedbackPage -= 1;
+  renderFeedbackPage();
+});
+
+feedbackNextBtn.addEventListener("click", function () {
+  const pagesCount = Math.ceil(feedbackData.length / getVisibleItemsCount());
+
+  if (feedbackPage >= pagesCount - 1) {
+    return;
+  }
+
+  feedbackPage += 1;
+  renderFeedbackPage();
+});
+
+window.addEventListener("resize", function () {
+  bestsellersPage = 0;
+  feedbackPage = 0;
+
+  renderBestsellersPage();
+  renderFeedbackPage();
+});

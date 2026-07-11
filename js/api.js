@@ -31,7 +31,6 @@ async function getBouquets(page = 1, limit = 4) {
       error: false,
     };
   } catch (error) {
-    console.error("Failed to fetch bouquets:", error);
     return {
       data: [],
       pages: 0,
@@ -46,35 +45,32 @@ async function getBouquetById(id) {
     const response = await axios.get(`${BASE_URL}/bouquets/${id}`);
     return normalizeBouquet(response.data);
   } catch (error) {
-    console.error("Failed to fetch bouquet:", error);
     return null;
   }
 }
 
 async function getBestsellers() {
   try {
-    const response = await axios.get("./db.json");
+    const response = await axios.get(`${BASE_URL}/bestsellers`);
 
     return {
-      data: response.data.bestsellers,
+      data: response.data.map(normalizeBouquet),
       error: false,
     };
   } catch (error) {
-    console.error("Failed to fetch bestsellers:", error);
-    return { data: [], error: true };
+    return {
+      data: [],
+      error: true,
+    };
   }
 }
 
 async function getBestsellerById(id) {
   try {
-    const response = await axios.get("./db.json");
+    const response = await axios.get(`${BASE_URL}/bestsellers/${id}`);
 
-    return (
-      response.data.bestsellers.find((bouquet) => bouquet.id === Number(id)) ||
-      null
-    );
+    return normalizeBouquet(response.data);
   } catch (error) {
-    console.error("Failed to fetch bestseller:", error);
     return null;
   }
 }
@@ -88,10 +84,24 @@ async function getFeedback() {
       error: false,
     };
   } catch (error) {
-    console.error("Failed to fetch feedback:", error);
-
     return {
       data: [],
+      error: true,
+    };
+  }
+}
+
+async function createOrder(order) {
+  try {
+    const response = await axios.post(`${BASE_URL}/orders`, order);
+
+    return {
+      data: response.data,
+      error: false,
+    };
+  } catch (error) {
+    return {
+      data: null,
       error: true,
     };
   }
